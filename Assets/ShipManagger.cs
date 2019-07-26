@@ -45,7 +45,7 @@ public class ShipManagger : MonoBehaviour
         var closest = ship;
         float closestDistance = 999999;
         var count = _allShips.Count;
-
+        var okDistanceSqr = okDistance * okDistance;
 
         for (int i = 0; i < count; ++i)
         {
@@ -53,9 +53,9 @@ public class ShipManagger : MonoBehaviour
 
             if (target.ShipId == ship.ShipId) continue;
 
-            var distance = Vector2.Distance(target.Pos, myPostion);
+            var distance = SqrDistance(target.Pos, ref myPostion);
 
-            if (distance < closestDistance && distance > okDistance)
+            if (distance < closestDistance && distance > okDistanceSqr)
             {
                 closestDistance = distance;
                 closest = target;
@@ -63,5 +63,13 @@ public class ShipManagger : MonoBehaviour
         }
 
         return closest;
+    }
+
+    float SqrDistance(Vector2 a, ref Vector2 b)
+    {
+        var x = a.x - b.x;
+        var y = a.y - b.y;
+
+        return x * x + y * y;
     }
 }
