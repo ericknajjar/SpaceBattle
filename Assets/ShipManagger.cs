@@ -24,7 +24,10 @@ public class ShipManagger : MonoBehaviour
         {
             var pos = RandomPos(min, max);
             var go = Instantiate(_prefab.gameObject, pos, Quaternion.identity);
-            _allShips.Add(go.GetComponent<Ship>());
+            var ship = go.GetComponent<Ship>();
+            ship.ShipId = i;
+            _allShips.Add(ship);
+
         }
     }
 
@@ -43,10 +46,13 @@ public class ShipManagger : MonoBehaviour
         float closestDistance = 999999;
         var count = _allShips.Count;
 
+
         for (int i = 0; i < count; ++i)
         {
             var target = _allShips[i];
-            if (target == ship) continue;
+
+            if (target.ShipId == ship.ShipId) continue;
+
             var distance = Vector2.Distance(target.Pos, myPostion);
 
             if (distance < closestDistance && distance > okDistance)

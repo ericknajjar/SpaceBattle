@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,7 @@ public class Ship : MonoBehaviour
     {
         var okDistance = _speed * 1.5f * Time.deltaTime;
         var ship = _shipManagger.FindClosestShip(this, okDistance);
+        //Debug.Log(ShipId);
         if (ship != this)
         {
             var direction = (ship.Pos - Pos);
@@ -33,6 +35,8 @@ public class Ship : MonoBehaviour
             transform.Translate(direction.normalized * _speed * Time.deltaTime);
         }
     }
+
+    public int ShipId;
 
     public void LateUpdate()
     {
