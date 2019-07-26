@@ -41,9 +41,11 @@ public class ShipManagger : MonoBehaviour
         var myPostion = ship.Pos;
         var closest = ship;
         float closestDistance = 999999;
+        var count = _allShips.Count;
 
-        foreach (var target in _allShips)
+        for (int i = 0; i < count; ++i)
         {
+            var target = _allShips[i];
             if (target == ship) continue;
             var distance = Vector2.Distance(target.Pos, myPostion);
 
