@@ -18,6 +18,7 @@ public class Ship : MonoBehaviour
     {
         _shipManagger = FindObjectOfType<ShipManagger>();
         _transform = transform;
+        Pos = _transform.position;
     }
 
     // Update is called once per frame
@@ -33,14 +34,12 @@ public class Ship : MonoBehaviour
         }
     }
 
-
-    public Vector2 Pos
+    public void LateUpdate()
     {
-        get
-        {
-            return _transform.position;
-        }
+        Pos = _transform.position;
     }
 
+
+    public Vector2 Pos { get; private set; }
 
 }
