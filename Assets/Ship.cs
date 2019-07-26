@@ -8,11 +8,16 @@ public class Ship : MonoBehaviour
 
     [SerializeField]
     float _speed = 2.0f;
-
+    Transform _transform;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        _transform = transform;
+    }
     void Start()
     {
         _shipManagger = FindObjectOfType<ShipManagger>();
+        _transform = transform;
     }
 
     // Update is called once per frame
@@ -33,7 +38,7 @@ public class Ship : MonoBehaviour
     {
         get
         {
-            return transform.position;
+            return _transform.position;
         }
     }
 
