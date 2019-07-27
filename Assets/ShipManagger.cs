@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class ShipManagger : MonoBehaviour
 {
@@ -16,9 +17,8 @@ public class ShipManagger : MonoBehaviour
     List<Ship> _allShips;
 
 
-    Dictionary<int, int> _distanceCache = new Dictionary<int, int>();
+    int[] _distanceCache;
 
-    float _latestOkDistance;
     bool filled = false;
     void Awake()
     {
@@ -38,7 +38,7 @@ public class ShipManagger : MonoBehaviour
         }
 
         var count = _allShips.Count;
-
+        _distanceCache = new int[count];
 
         FillDinstanceCache(0);
     }
@@ -53,8 +53,8 @@ public class ShipManagger : MonoBehaviour
 
     public Ship FindClosestShip(Ship ship, float okDistance)
     {
-        _latestOkDistance = okDistance;
-        // return FindClosestShipBruteForce(ship, okDistance);
+       // return ship;
+      //  return FindClosestShipBruteForce(ship, okDistance);
         if (!filled)
         {
             filled = true;
@@ -71,10 +71,25 @@ public class ShipManagger : MonoBehaviour
 
         var myPostion = ship.Pos;
         var closest = ship;
-        float closestDistance = 999999;
+        float closestDistance = 99999999999;
         var count = _allShips.Count;
         var okDistanceSqr = okDistance * okDistance;
 
+       /* Parallel.For(0, count, (i) => {
+
+            if (ship.ShipId != i)
+            {
+                var target = _allShips[i];
+
+                var distance = SqrDistance(target.Pos, ref myPostion);
+
+                if (distance < closestDistance && distance > okDistanceSqr)
+                {
+                    closestDistance = distance;
+                    closest = target;
+                }
+            }
+        });*/
         for (int i = 0; i < count; ++i)
         {
             if (ship.ShipId == i) continue;
@@ -97,14 +112,22 @@ public class ShipManagger : MonoBehaviour
     {
         var count = _allShips.Count;
 
-        for (int i = 0; i < count; ++i)
-        {
+
+       Parallel.For(0, count, (i) => {
+    
             var me = _allShips[i];
-            var shipsClosests = _distanceCache[i];
             var other = FindClosestShipBruteForce(me, okDistance);
             _distanceCache[me.ShipId] = other.ShipId;
-            _distanceCache[other.ShipId] = me.ShipId;
-        }
+           
+       });
+
+        /*for(int i=0; i<count;++i)
+        {
+            var me = _allShips[i];
+            var other = FindClosestShipBruteForce(me, okDistance);
+            _distanceCache[me.ShipId] = other.ShipId;
+        }*/
+
     }
 
     private void LateUpdate()
