@@ -75,28 +75,17 @@ public class ShipManagger : MonoBehaviour
         var count = _allShips.Count;
         var okDistanceSqr = okDistance * okDistance;
 
-       /* Parallel.For(0, count, (i) => {
-
-            if (ship.ShipId != i)
-            {
-                var target = _allShips[i];
-
-                var distance = SqrDistance(target.Pos, ref myPostion);
-
-                if (distance < closestDistance && distance > okDistanceSqr)
-                {
-                    closestDistance = distance;
-                    closest = target;
-                }
-            }
-        });*/
         for (int i = 0; i < count; ++i)
         {
             if (ship.ShipId == i) continue;
 
             var target = _allShips[i];
+            var targetPos = target.Pos;
 
-            var distance = SqrDistance(target.Pos, ref myPostion);
+            var x = targetPos.x - myPostion.x;
+            var y = targetPos.y - myPostion.y;
+
+           float distance =  x * x + y * y;
 
             if (distance < closestDistance && distance > okDistanceSqr)
             {
@@ -121,13 +110,6 @@ public class ShipManagger : MonoBehaviour
            
        });
 
-        /*for(int i=0; i<count;++i)
-        {
-            var me = _allShips[i];
-            var other = FindClosestShipBruteForce(me, okDistance);
-            _distanceCache[me.ShipId] = other.ShipId;
-        }*/
-
     }
 
     private void LateUpdate()
@@ -137,11 +119,4 @@ public class ShipManagger : MonoBehaviour
         //FillDinstanceCache(_latestOkDistance);
     }
 
-    float SqrDistance(Vector2 a, ref Vector2 b)
-    {
-        var x = a.x - b.x;
-        var y = a.y - b.y;
-
-        return x * x + y * y;
-    }
 }
