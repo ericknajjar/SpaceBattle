@@ -22,20 +22,6 @@ public class Ship : MonoBehaviour
         Pos = _transform.position;
     }
 
-    // Update is called once per frame
-   /* void Update()
-    {
-        var okDistance = _speed * 1.5f * (1f/18);
-        var ship = _shipManagger.FindClosestShip(this, okDistance);
-      
-        if (ship != this)
-        {
-            var direction = (ship.Pos - Pos);
-
-            transform.Translate(direction.normalized * _speed * Time.deltaTime);
-        }
-    }*/
-
     public void Translate(Vector2 tanslation)
     {
         _transform.Translate(tanslation);

@@ -132,8 +132,8 @@ public class ShipManagger : MonoBehaviour
 
     private void LateUpdate()
     {
-      //  if(Time.frameCount%10==0)
-       filled = false;
+       if(Time.frameCount%5==0)
+         filled = false;
     }
 
 }
