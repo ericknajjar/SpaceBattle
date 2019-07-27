@@ -17,7 +17,7 @@ public class ShipManagger : MonoBehaviour
     Ship[] _allShips;
 
 
-    int[] _distanceCache;
+    Vector2[] _translationCache;
 
     bool filled = false;
     void Awake()
@@ -38,7 +38,7 @@ public class ShipManagger : MonoBehaviour
         }
 
         var count = _allShips.Length;
-        _distanceCache = new int[count];
+        _translationCache = new Vector2[count];
 
         FillDinstanceCache(0);
     }
@@ -51,7 +51,23 @@ public class ShipManagger : MonoBehaviour
         return new Vector2(x, y);
     }
 
-    public Ship FindClosestShip(Ship ship, float okDistance)
+    public void Update()
+    {
+   
+        var count = _allShips.Length;
+        float okDistance = _allShips[0]._speed * 1.5f * (1f / 18);
+
+        var okDistanceSqr = okDistance * okDistance;
+
+        for (int i = 0; i < count; ++i)
+        {
+            var me = _allShips[i];
+            var direction = FindAproachingDirection(me, okDistance);
+            me.Translate(direction * Time.deltaTime);
+        }
+    }
+
+    public Vector2 FindAproachingDirection(Ship ship, float okDistance)
     {
        // return ship;
       //  return FindClosestShipBruteForce(ship, okDistance);
@@ -61,9 +77,9 @@ public class ShipManagger : MonoBehaviour
             FillDinstanceCache(okDistance);
         }
 
-        var found = _distanceCache[ship.ShipId];
+        var found = _translationCache[ship.ShipId];
 
-        return _allShips[found];
+        return found;
     }
 
     Ship FindClosestShipBruteForce(Ship ship, float okDistance)
@@ -74,7 +90,7 @@ public class ShipManagger : MonoBehaviour
         float closestDistance = 99999999999;
         var count = _allShips.Length;
         var okDistanceSqr = okDistance * okDistance;
-    
+
         for (int i = 0; i < count; ++i)
         {
             if (ship.ShipId == i) continue;
@@ -85,7 +101,7 @@ public class ShipManagger : MonoBehaviour
             var x = targetPos.x - myPostion.x;
             var y = targetPos.y - myPostion.y;
 
-           float distance =  x * x + y * y;
+            float distance = x * x + y * y;
 
             if (distance < closestDistance && distance > okDistanceSqr)
             {
@@ -93,7 +109,8 @@ public class ShipManagger : MonoBehaviour
                 closest = target;
             }
         }
-
+        
+       
         return closest;
     }
 
@@ -106,7 +123,8 @@ public class ShipManagger : MonoBehaviour
     
             var me = _allShips[i];
             var other = FindClosestShipBruteForce(me, okDistance);
-            _distanceCache[me.ShipId] = other.ShipId;
+           var direction = (other.Pos - me.Pos).normalized * me._speed;
+           _translationCache[me.ShipId] = direction;
            
        });
 
@@ -114,9 +132,8 @@ public class ShipManagger : MonoBehaviour
 
     private void LateUpdate()
     {
-        filled = false;
-        // _distanceCache.Clear();
-        //FillDinstanceCache(_latestOkDistance);
+      //  if(Time.frameCount%10==0)
+       filled = false;
     }
 
 }

@@ -8,7 +8,7 @@ public class Ship : MonoBehaviour
     ShipManagger _shipManagger;
 
     [SerializeField]
-    float _speed = 2.0f;
+    public float _speed = 2.0f;
     Transform _transform;
     // Start is called before the first frame update
     private void Awake()
@@ -23,17 +23,22 @@ public class Ship : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+   /* void Update()
     {
         var okDistance = _speed * 1.5f * (1f/18);
         var ship = _shipManagger.FindClosestShip(this, okDistance);
-        //Debug.Log(ShipId);
+      
         if (ship != this)
         {
             var direction = (ship.Pos - Pos);
 
             transform.Translate(direction.normalized * _speed * Time.deltaTime);
         }
+    }*/
+
+    public void Translate(Vector2 tanslation)
+    {
+        _transform.Translate(tanslation);
     }
 
     public int ShipId;
