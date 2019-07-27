@@ -44,6 +44,6 @@ public class Ship : MonoBehaviour
     }
 
 
-    public Vector2 Pos { get; private set; }
+    public Vector2 Pos;
 
 }

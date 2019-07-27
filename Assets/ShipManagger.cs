@@ -14,7 +14,7 @@ public class ShipManagger : MonoBehaviour
     int _numShips = 25;
 
     // Start is called before the first frame update
-    List<Ship> _allShips;
+    Ship[] _allShips;
 
 
     int[] _distanceCache;
@@ -22,7 +22,7 @@ public class ShipManagger : MonoBehaviour
     bool filled = false;
     void Awake()
     {
-        _allShips = new List<Ship>(_numShips);
+        _allShips = new Ship[_numShips];
 
         var min = Camera.main.ScreenToWorldPoint(Vector3.zero);
         var max = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
@@ -33,11 +33,11 @@ public class ShipManagger : MonoBehaviour
             var go = Instantiate(_prefab.gameObject, pos, Quaternion.identity);
             var ship = go.GetComponent<Ship>();
             ship.ShipId = i;
-            _allShips.Add(ship);
+            _allShips[i] = ship;
 
         }
 
-        var count = _allShips.Count;
+        var count = _allShips.Length;
         _distanceCache = new int[count];
 
         FillDinstanceCache(0);
@@ -72,9 +72,9 @@ public class ShipManagger : MonoBehaviour
         var myPostion = ship.Pos;
         var closest = ship;
         float closestDistance = 99999999999;
-        var count = _allShips.Count;
+        var count = _allShips.Length;
         var okDistanceSqr = okDistance * okDistance;
-
+    
         for (int i = 0; i < count; ++i)
         {
             if (ship.ShipId == i) continue;
@@ -99,7 +99,7 @@ public class ShipManagger : MonoBehaviour
 
     private void FillDinstanceCache(float okDistance)
     {
-        var count = _allShips.Count;
+        var count = _allShips.Length;
 
 
        Parallel.For(0, count, (i) => {
