@@ -18,7 +18,7 @@ public class Ship : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var okDistance = _speed * 1.5f * Time.deltaTime;
+        var okDistance = _speed * 1.5f * (1f / 18f);
         var ship = _shipManagger.FindClosestShip(this, okDistance);
         if (ship != this)
         {
